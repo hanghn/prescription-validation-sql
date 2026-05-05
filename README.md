@@ -10,6 +10,23 @@ The system also reacts automatically to changes in patient state (e.g., pregnanc
 
 ---
 
+## Project context & attribution
+
+This started as a course assignment. To be clear about what was provided vs. what I built:
+
+**Provided as scaffolding:**
+- The database schema and seed data (`schema.sql`) — 8 tables with relationships and sample patients, doctors, medications, and known drug-drug interactions.
+- The high-level requirements: which clinical safety rules to enforce, and the test cases at the bottom of `prescribe.sql` used to validate correctness.
+
+**My contribution:**
+- The full `prescribe` stored procedure — variable declarations, the three sequential validation checks, the cursor-based interaction lookup, and `SIGNAL SQLSTATE` error propagation.
+- The `patient_after_update_pregnant` trigger — both the prenatal-recommendation insert and the cross-table `DELETE … JOIN` cleanup of unsafe prescriptions.
+- All design decisions documented below: when to use a procedure vs. a trigger vs. a cursor, how to structure the error messaging, and the tradeoff analysis between database-layer and application-layer logic.
+
+The interesting work was the design judgment, not the schema setup.
+
+---
+
 ## Why this project
 
 The interesting design question isn't "can you write SQL?" — it's **where should each kind of logic live?** Validation rules that must always run regardless of caller belong at the database layer; rules that change frequently belong in the application layer. This project is a study in making that tradeoff deliberately, using the right SQL construct for each kind of rule.
