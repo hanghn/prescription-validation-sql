@@ -1,10 +1,10 @@
--- HW5: Identifying Adverse Drug Events (ADEs) with Stored Programs
--- Prof. Rachlin
--- CS 3200 / CS5200: Databases
-
--- We've already setup the ade database by running ade_setup.sql
--- First, make ade the active database.  Note, this database is actually based on
--- the emr_sp schema used in the lab, but it included some extra tables.
+-- Prescription validation engine
+-- Stored procedure + trigger to enforce clinical safety rules at the database layer:
+--   1. Pediatric safety       -- block meds not approved for children under 12
+--   2. Pregnancy safety       -- block meds not safe during pregnancy
+--   3. Drug-drug interactions -- block meds that conflict with active prescriptions
+--
+-- Run schema.sql first to create the `ade` database and seed test data.
 
 use ade;
 
@@ -163,9 +163,9 @@ DELIMITER ;
 
 
 
--- --------------------------                  TEST CASES                     -----------------------
--- -------------------------- DONT CHANGE BELOW THIS LINE! -----------------------
--- Test cases
+-- ------------------------------------------------------------------------------
+--                                  TEST CASES
+-- ------------------------------------------------------------------------------
 truncate prescription;
 
 -- These prescriptions should succeed
